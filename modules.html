@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESM & Modules — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="async.html">Async</a>
+          <a href="modules.html">ESM</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="async.html">Async</a>
+        <a href="modules.html">ESM & Modules</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#esm">ES Modules</a></li>
+            <li><a href="#commonjs">CommonJS</a></li>
+            <li><a href="#dynamic">Dynamic Import</a></li>
+            <li><a href="#tree">Tree Shaking</a></li>
+            <li><a href="#circular">Circular Dependencies</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 05</div>
+        <h1>ESM & Modules</h1>
+        <p>
+          JavaScript modules let you split code into reusable files. There are
+          two main systems: CommonJS (Node) and ES Modules (modern standard).
+        </p>
+
+        <h2 id="esm">ES Modules (ESM)</h2>
+        <p>
+          ESM is the official standard. It uses static imports, which enables
+          tree-shaking and better tooling.
+        </p>
+
+        <h3>Named Exports</h3>
+        <pre><code><span class="code-comment">// math.js</span>
+export <span class="code-keyword">const</span> PI = <span class="code-number">3.14159</span>;
+
+export <span class="code-keyword">function</span> <span class="code-function">add</span>(a, b) {
+  <span class="code-keyword">return</span> a + b;
+}
+
+<span class="code-comment">// app.js</span>
+import { PI, add } from <span class="code-string">'./math.js'</span>;
+console.log(add(<span class="code-number">2</span>, <span class="code-number">3</span>)); <span class="code-comment">// 5</span></code></pre>
+
+        <h3>Default Exports</h3>
+        <pre><code><span class="code-comment">// logger.js</span>
+export <span class="code-keyword">default function</span> <span class="code-function">log</span>(msg) {
+  console.log(<span class="code-string">`[LOG] ${msg}`</span>);
+}
+
+<span class="code-comment">// app.js</span>
+import log from <span class="code-string">'./logger.js'</span>;
+<span class="code-comment">// You can rename default imports freely</span>
+import myLog from <span class="code-string">'./logger.js'</span>;</code></pre>
+
+        <h3>Mixed Exports</h3>
+        <pre><code><span class="code-comment">// utils.js</span>
+export <span class="code-keyword">const</span> helper = () => {};
+export <span class="code-keyword">const</span> config = {};
+export <span class="code-keyword">default class</span> <span class="code-function">Utils</span> {}
+
+<span class="code-comment">// app.js</span>
+import Utils, { helper, config } from <span class="code-string">'./utils.js'</span>;
+import * <span class="code-keyword">as</span> utils from <span class="code-string">'./utils.js'</span>;</code></pre>
+
+        <h2 id="commonjs">CommonJS (CJS)</h2>
+        <p>
+          Node.js originally used CommonJS. It is still widely used but ESM is
+          the future.
+        </p>
+        <pre><code><span class="code-comment">// math.cjs</span>
+<span class="code-keyword">const</span> PI = <span class="code-number">3.14159</span>;
+
+<span class="code-keyword">function</span> <span class="code-function">add</span>(a, b) {
+  <span class="code-keyword">return</span> a + b;
+}
+
+module.exports = { PI, add };
+
+<span class="code-comment">// app.cjs</span>
+<span class="code-keyword">const</span> { PI, add } = require(<span class="code-string">'./math.cjs'</span>);</code></pre>
+
+        <table>
+          <tr>
+            <th>Feature</th>
+            <th>ESM</th>
+            <th>CommonJS</th>
+          </tr>
+          <tr>
+            <td>Syntax</td>
+            <td><code>import/export</code></td>
+            <td><code>require/module.exports</code></td>
+          </tr>
+          <tr>
+            <td>Loading</td>
+            <td>Static (parse time)</td>
+            <td>Dynamic (runtime)</td>
+          </tr>
+          <tr>
+            <td>Tree Shaking</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Top-level await</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Browser native</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+        </table>
+
+        <h2 id="dynamic">Dynamic Import</h2>
+        <p>Load modules on demand. Returns a Promise.</p>
+        <pre><code><span class="code-keyword">async function</span> <span class="code-function">loadChart</span>() {
+  <span class="code-keyword">const</span> { default: Chart } = <span class="code-keyword">await</span> import(<span class="code-string">'./chart.js'</span>);
+  <span class="code-keyword">const</span> chart = <span class="code-keyword">new</span> Chart();
+  chart.render();
+}
+
+<span class="code-comment">// Conditional loading</span>
+<span class="code-keyword">if</span> (userPrefersDark) {
+  <span class="code-keyword">const</span> theme = <span class="code-keyword">await</span> import(<span class="code-string">'./dark-theme.js'</span>);
+  theme.apply();
+}</code></pre>
+
+        <h2 id="tree">Tree Shaking</h2>
+        <p>
+          Tree shaking removes unused exports at build time. It only works with
+          ESM because imports are static.
+        </p>
+        <pre><code><span class="code-comment">// library.js — exports 100 functions</span>
+export <span class="code-keyword">function</span> <span class="code-function">a</span>() {}
+export <span class="code-keyword">function</span> <span class="code-function">b</span>() {}
+<span class="code-comment">// ... 98 more</span>
+
+<span class="code-comment">// app.js — only imports 'a'</span>
+import { a } from <span class="code-string">'./library.js'</span>;
+
+<span class="code-comment">// With tree shaking, only 'a' ends up in the bundle.</span>
+<span class="code-comment">// 'b' and the rest are removed.</span></code></pre>
+
+        <h2 id="circular">Circular Dependencies</h2>
+        <p>
+          When module A imports B, and B imports A. ESM handles this better than
+          CJS.
+        </p>
+        <pre><code><span class="code-comment">// a.js</span>
+import { b } from <span class="code-string">'./b.js'</span>;
+export <span class="code-keyword">const</span> a = <span class="code-string">'A'</span>;
+console.log(b); <span class="code-comment">// undefined (b has not finished evaluating yet)</span>
+
+<span class="code-comment">// b.js</span>
+import { a } from <span class="code-string">'./a.js'</span>;
+export <span class="code-keyword">const</span> b = <span class="code-string">'B'</span>;
+console.log(a); <span class="code-comment">// "A" (a was already declared)</span></code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--warning)">
+          <strong>⚠️ Avoid Circular Dependencies</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            Refactor shared code into a third module. Circular deps create
+            hard-to-debug initialization order bugs.
+          </p>
+        </div>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="async.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Async</a
+          >
+          <a
+            href="dom.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: DOM →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

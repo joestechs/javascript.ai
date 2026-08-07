@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projects — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="interview.html">Interview</a>
+          <a href="projects.html">Projects</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="interview.html">Interview Prep</a>
+        <a href="projects.html">Projects</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">Projects</div>
+          <ul class="sidebar-list">
+            <li><a href="#todo">To-Do App</a></li>
+            <li><a href="#weather">Weather Dashboard</a></li>
+            <li><a href="#chat">Real-Time Chat</a></li>
+            <li><a href="#search">Search Autocomplete</a></li>
+            <li><a href="#canvas">Canvas Drawing</a></li>
+            <li><a href="#virtual">Virtual Scroll</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 10</div>
+        <h1>Practical Projects</h1>
+        <p>
+          Build these projects to solidify your skills. Each one focuses on
+          different JavaScript concepts.
+        </p>
+
+        <h2 id="todo">Project 1: To-Do App (DOM + Events)</h2>
+        <p>
+          <strong>Concepts:</strong> DOM manipulation, event delegation,
+          localStorage.
+        </p>
+        <pre><code><span class="code-comment">// Core structure</span>
+<span class="code-keyword">const</span> form = document.querySelector(<span class="code-string">'#todo-form'</span>);
+<span class="code-keyword">const</span> list = document.querySelector(<span class="code-string">'#todo-list'</span>);
+<span class="code-keyword">let</span> todos = JSON.parse(localStorage.getItem(<span class="code-string">'todos'</span>)) || [];
+
+<span class="code-keyword">function</span> <span class="code-function">render</span>() {
+  list.innerHTML = todos.map((todo, i) => <span class="code-string">`
+    &lt;li data-index="${i}"&gt;
+      &lt;span class="${todo.done ? 'done' : ''}"&gt;${todo.text}&lt;/span&gt;
+      &lt;button class="toggle"&gt;✓&lt;/button&gt;
+      &lt;button class="delete"&gt;✕&lt;/button&gt;
+    &lt;/li&gt;
+  `</span>).join(<span class="code-string">''</span>);
+  localStorage.setItem(<span class="code-string">'todos'</span>, JSON.stringify(todos));
+}
+
+form.addEventListener(<span class="code-string">'submit'</span>, (e) => {
+  e.preventDefault();
+  <span class="code-keyword">const</span> input = form.querySelector(<span class="code-string">'input'</span>);
+  todos.push({ text: input.value, done: <span class="code-number">false</span> });
+  input.value = <span class="code-string">''</span>;
+  render();
+});
+
+list.addEventListener(<span class="code-string">'click'</span>, (e) => {
+  <span class="code-keyword">const</span> index = e.target.closest(<span class="code-string">'li'</span>)?.dataset.index;
+  <span class="code-keyword">if</span> (!index) <span class="code-keyword">return</span>;
+
+  <span class="code-keyword">if</span> (e.target.matches(<span class="code-string">'.toggle'</span>)) {
+    todos[index].done = !todos[index].done;
+  }
+  <span class="code-keyword">if</span> (e.target.matches(<span class="code-string">'.delete'</span>)) {
+    todos.splice(index, <span class="code-number">1</span>);
+  }
+  render();
+});
+
+render();</code></pre>
+
+        <h2 id="weather">Project 2: Weather Dashboard (Fetch + Async)</h2>
+        <p>
+          <strong>Concepts:</strong> fetch API, async/await, error handling,
+          dynamic DOM updates.
+        </p>
+        <pre><code><span class="code-keyword">async function</span> <span class="code-function">getWeather</span>(city) {
+  <span class="code-keyword">try</span> {
+    <span class="code-keyword">const</span> res = <span class="code-keyword">await</span> fetch(
+      <span class="code-string">`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=KEY`</span>
+    );
+    <span class="code-keyword">if</span> (!res.ok) <span class="code-keyword">throw new</span> Error(<span class="code-string">'City not found'</span>);
+    <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> res.json();
+    displayWeather(data);
+  } <span class="code-keyword">catch</span> (err) {
+    showError(err.message);
+  }
+}</code></pre>
+
+        <h2 id="chat">Project 3: Real-Time Chat (WebSockets)</h2>
+        <p>
+          <strong>Concepts:</strong> WebSocket API, event-driven architecture,
+          JSON messaging.
+        </p>
+        <pre><code><span class="code-keyword">const</span> ws = <span class="code-keyword">new</span> WebSocket(<span class="code-string">'wss://chat.example.com'</span>);
+
+ws.onopen = () => console.log(<span class="code-string">'Connected'</span>);
+
+ws.onmessage = (event) => {
+  <span class="code-keyword">const</span> msg = JSON.parse(event.data);
+  appendMessage(msg.user, msg.text);
+};
+
+<span class="code-keyword">function</span> <span class="code-function">sendMessage</span>(text) {
+  <span class="code-keyword">const</span> payload = JSON.stringify({ user: <span class="code-string">'Me'</span>, text });
+  ws.send(payload);
+}</code></pre>
+
+        <h2 id="search">Project 4: Search Autocomplete (Debounce + Fetch)</h2>
+        <p>
+          <strong>Concepts:</strong> Debounce, AbortController, dynamic
+          suggestions.
+        </p>
+        <pre><code><span class="code-keyword">const</span> searchInput = document.querySelector(<span class="code-string">'#search'</span>);
+<span class="code-keyword">let</span> controller;
+
+<span class="code-keyword">const</span> debouncedSearch = debounce(<span class="code-keyword">async</span> (query) => {
+  <span class="code-keyword">if</span> (controller) controller.abort();
+  controller = <span class="code-keyword">new</span> AbortController();
+
+  <span class="code-keyword">try</span> {
+    <span class="code-keyword">const</span> res = <span class="code-keyword">await</span> fetch(<span class="code-string">`/api/search?q=${query}`</span>, {
+      signal: controller.signal
+    });
+    <span class="code-keyword">const</span> results = <span class="code-keyword">await</span> res.json();
+    renderSuggestions(results);
+  } <span class="code-keyword">catch</span> (err) {
+    <span class="code-keyword">if</span> (err.name !== <span class="code-string">'AbortError'</span>) console.error(err);
+  }
+}, <span class="code-number">300</span>);
+
+searchInput.addEventListener(<span class="code-string">'input'</span>, (e) => {
+  debouncedSearch(e.target.value);
+});</code></pre>
+
+        <h2 id="canvas">Project 5: Canvas Drawing App</h2>
+        <p>
+          <strong>Concepts:</strong> Canvas API, mouse events, state management.
+        </p>
+        <pre><code><span class="code-keyword">const</span> canvas = document.querySelector(<span class="code-string">'#draw'</span>);
+<span class="code-keyword">const</span> ctx = canvas.getContext(<span class="code-string">'2d'</span>);
+<span class="code-keyword">let</span> drawing = <span class="code-number">false</span>;
+
+canvas.addEventListener(<span class="code-string">'mousedown'</span>, () => drawing = <span class="code-number">true</span>);
+canvas.addEventListener(<span class="code-string">'mouseup'</span>, () => drawing = <span class="code-number">false</span>);
+canvas.addEventListener(<span class="code-string">'mousemove'</span>, (e) => {
+  <span class="code-keyword">if</span> (!drawing) <span class="code-keyword">return</span>;
+  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.stroke();
+});</code></pre>
+
+        <h2 id="virtual">Project 6: Virtual Scroll List</h2>
+        <p>
+          <strong>Concepts:</strong> Performance optimization, large dataset
+          handling, scroll events.
+        </p>
+        <pre><code><span class="code-keyword">class</span> <span class="code-function">VirtualList</span> {
+  <span class="code-keyword">constructor</span>(container, items, itemHeight) {
+    <span class="code-keyword">this</span>.container = container;
+    <span class="code-keyword">this</span>.items = items;
+    <span class="code-keyword">this</span>.itemHeight = itemHeight;
+    <span class="code-keyword">this</span>.container.style.height = <span class="code-string">'400px'</span>;
+    <span class="code-keyword">this</span>.container.style.overflow = <span class="code-string">'auto'</span>;
+
+    <span class="code-keyword">const</span> totalHeight = items.length * itemHeight;
+    <span class="code-keyword">this</span>.spacer = document.createElement(<span class="code-string">'div'</span>);
+    <span class="code-keyword">this</span>.spacer.style.height = <span class="code-string">`${totalHeight}px`</span>;
+    <span class="code-keyword">this</span>.container.appendChild(<span class="code-keyword">this</span>.spacer);
+
+    <span class="code-keyword">this</span>.container.addEventListener(<span class="code-string">'scroll'</span>, () => <span class="code-keyword">this</span>.render());
+    <span class="code-keyword">this</span>.render();
+  }
+
+  render() {
+    <span class="code-keyword">const</span> scrollTop = <span class="code-keyword">this</span>.container.scrollTop;
+    <span class="code-keyword">const</span> startIdx = Math.floor(scrollTop / <span class="code-keyword">this</span>.itemHeight);
+    <span class="code-keyword">const</span> visibleCount = Math.ceil(<span class="code-number">400</span> / <span class="code-keyword">this</span>.itemHeight);
+
+    <span class="code-comment">// Only render visible items + buffer</span>
+    <span class="code-keyword">const</span> visible = <span class="code-keyword">this</span>.items.slice(startIdx, startIdx + visibleCount + <span class="code-number">2</span>);
+    <span class="code-comment">// ... render logic</span>
+  }
+}</code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--success)">
+          <strong>✅ Project Checklist</strong>
+          <ul class="text-sm" style="margin-bottom: 0">
+            <li>
+              Use <code>const</code> and <code>let</code>. No <code>var</code>.
+            </li>
+            <li>Handle errors with try/catch.</li>
+            <li>Write clean, modular functions.</li>
+            <li>Add comments explaining WHY, not WHAT.</li>
+            <li>Test edge cases (empty input, network failure).</li>
+          </ul>
+        </div>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="interview.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Interview Prep</a
+          >
+          <a
+            href="index.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Back to Home →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

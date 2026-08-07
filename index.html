@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>javascript.ai — Practical JavaScript Reference</title>
+    <meta
+      name="description"
+      content="A simplified-English, code-heavy JavaScript guide. From fundamentals to frameworks."
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">JS</div>
+          javascript.ai
+        </a>
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="functions.html">Functions</a>
+          <a href="async.html">Async</a>
+          <a href="modules.html">ESM</a>
+          <a href="frameworks.html">Frameworks</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+        <button class="mobile-menu-btn" aria-label="Menu">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="functions.html">Functions & Scope</a>
+        <a href="objects-classes.html">Objects & Classes</a>
+        <a href="async.html">Async JavaScript</a>
+        <a href="modules.html">ESM & Modules</a>
+        <a href="dom.html">DOM & Events</a>
+        <a href="advanced.html">Advanced Concepts</a>
+        <a href="testing.html">Testing</a>
+        <a href="frameworks.html">Frameworks</a>
+        <a href="interview.html">Interview Prep</a>
+        <a href="projects.html">Projects</a>
+      </div>
+    </nav>
+
+    <header
+      class="hero"
+      style="
+        background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+        border-bottom: 1px solid var(--border);
+      "
+    >
+      <div class="container">
+        <div class="badge badge-accent mb-4" style="margin-bottom: 1.5rem">
+          <span
+            style="
+              width: 6px;
+              height: 6px;
+              background: var(--accent);
+              border-radius: 50%;
+              display: inline-block;
+            "
+          ></span>
+          Open Source Reference
+        </div>
+        <h1>
+          Learn JavaScript.<br /><span style="color: var(--accent)"
+            >Deeply. Practically.</span
+          >
+        </h1>
+        <p style="max-width: 600px; margin: 0 auto 2rem; font-size: 1.125rem">
+          A simplified-English guide with 200+ code examples. We cover every
+          spec, pattern, and pitfall. Built for developers who want to master JS
+          from first principles to production.
+        </p>
+        <div
+          style="
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+          "
+        >
+          <a
+            href="fundamentals.html"
+            style="
+              padding: 0.75rem 1.5rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 8px;
+              font-weight: 600;
+              text-decoration: none;
+            "
+            >Start Learning</a
+          >
+          <a
+            href="interview.html"
+            style="
+              padding: 0.75rem 1.5rem;
+              background: var(--surface);
+              color: var(--text);
+              border: 1px solid var(--border);
+              border-radius: 8px;
+              font-weight: 600;
+              text-decoration: none;
+            "
+            >Interview Q&A</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <section style="border-bottom: 1px solid var(--border)">
+      <div
+        class="container"
+        style="
+          padding: 3rem 1.5rem;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 2rem;
+          text-align: center;
+        "
+      >
+        <div>
+          <div style="font-size: 2rem; font-weight: 800">14</div>
+          <div class="text-sm text-secondary">Chapters</div>
+        </div>
+        <div>
+          <div style="font-size: 2rem; font-weight: 800">200+</div>
+          <div class="text-sm text-secondary">Code Examples</div>
+        </div>
+        <div>
+          <div style="font-size: 2rem; font-weight: 800">85</div>
+          <div class="text-sm text-secondary">Interview Questions</div>
+        </div>
+        <div>
+          <div style="font-size: 2rem; font-weight: 800">12</div>
+          <div class="text-sm text-secondary">Projects</div>
+        </div>
+      </div>
+    </section>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">Curriculum</div>
+          <ul class="sidebar-list">
+            <li>
+              <a href="fundamentals.html"
+                ><span class="sidebar-num">01</span> Fundamentals</a
+              >
+            </li>
+            <li>
+              <a href="functions.html"
+                ><span class="sidebar-num">02</span> Functions & Scope</a
+              >
+            </li>
+            <li>
+              <a href="objects-classes.html"
+                ><span class="sidebar-num">03</span> Objects & Classes</a
+              >
+            </li>
+            <li>
+              <a href="async.html"
+                ><span class="sidebar-num">04</span> Async JavaScript</a
+              >
+            </li>
+            <li>
+              <a href="modules.html"
+                ><span class="sidebar-num">05</span> ESM & Modules</a
+              >
+            </li>
+            <li>
+              <a href="dom.html"
+                ><span class="sidebar-num">06</span> DOM & Events</a
+              >
+            </li>
+            <li>
+              <a href="advanced.html"
+                ><span class="sidebar-num">07</span> Advanced Concepts</a
+              >
+            </li>
+            <li>
+              <a href="testing.html"
+                ><span class="sidebar-num">08</span> Testing</a
+              >
+            </li>
+            <li>
+              <a href="frameworks.html"
+                ><span class="sidebar-num">09</span> Frameworks</a
+              >
+            </li>
+            <li>
+              <a href="interview.html"
+                ><span class="sidebar-num">10</span> Interview Prep</a
+              >
+            </li>
+            <li>
+              <a href="projects.html"
+                ><span class="sidebar-num">11</span> Projects</a
+              >
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <div>
+        <h2>What You Will Learn</h2>
+        <div class="grid-2">
+          <div class="card card-hover">
+            <div
+              style="
+                font-size: 0.75rem;
+                font-weight: 800;
+                color: var(--accent);
+                margin-bottom: 0.5rem;
+              "
+            >
+              CHAPTER 01
+            </div>
+            <h3 style="margin-top: 0">Fundamentals</h3>
+            <p class="text-sm">
+              Variables, types, coercion, operators, and control flow. Written
+              in simple English.
+            </p>
+          </div>
+          <div class="card card-hover">
+            <div
+              style="
+                font-size: 0.75rem;
+                font-weight: 800;
+                color: var(--accent);
+                margin-bottom: 0.5rem;
+              "
+            >
+              CHAPTER 02
+            </div>
+            <h3 style="margin-top: 0">Functions Deep Dive</h3>
+            <p class="text-sm">
+              Declarations, expressions, arrows, scope, closures, and the
+              <code>this</code> keyword.
+            </p>
+          </div>
+          <div class="card card-hover">
+            <div
+              style="
+                font-size: 0.75rem;
+                font-weight: 800;
+                color: var(--accent);
+                margin-bottom: 0.5rem;
+              "
+            >
+              CHAPTER 03
+            </div>
+            <h3 style="margin-top: 0">Objects & Classes</h3>
+            <p class="text-sm">
+              Prototypes, inheritance, ES6 classes, private fields, and object
+              patterns.
+            </p>
+          </div>
+          <div class="card card-hover">
+            <div
+              style="
+                font-size: 0.75rem;
+                font-weight: 800;
+                color: var(--accent);
+                margin-bottom: 0.5rem;
+              "
+            >
+              CHAPTER 04
+            </div>
+            <h3 style="margin-top: 0">Async Mastery</h3>
+            <p class="text-sm">
+              Event loop, callbacks, Promises, async/await, and microtasks
+              explained with diagrams.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="card"
+          style="
+            background: var(--code-bg);
+            color: var(--code-text);
+            margin-top: 2rem;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1rem;
+            "
+          >
+            <span style="font-weight: 700">Quick Example</span>
+            <span class="badge badge-success" style="font-size: 0.625rem"
+              >Runnable</span
+            >
+          </div>
+          <pre
+            style="background: transparent; border: none; padding: 0; margin: 0"
+          ><code><span class="code-comment">// Destructuring + Rest/Spread</span>
+<span class="code-keyword">const</span> user = { name: <span class="code-string">'Ada'</span>, role: <span class="code-string">'Engineer'</span>, level: <span class="code-number">5</span> };
+<span class="code-keyword">const</span> { name, ...metadata } = user;
+
+console.log(name);      <span class="code-comment">// "Ada"</span>
+console.log(metadata);  <span class="code-comment">// { role: "Engineer", level: 5 }</span></code></pre>
+        </div>
+
+        <div
+          class="mt-8"
+          style="
+            background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+          "
+        >
+          <h3 style="margin-top: 0; color: white">Modern ESM & Tooling</h3>
+          <p style="color: rgba(255, 255, 255, 0.9)">
+            Learn ES Modules, dynamic imports, tree-shaking, and how modern
+            bundlers like Vite, Rollup, and esbuild work under the hood.
+          </p>
+          <div
+            style="
+              display: flex;
+              gap: 0.5rem;
+              flex-wrap: wrap;
+              margin-top: 1rem;
+            "
+          >
+            <code
+              style="
+                background: rgba(255, 255, 255, 0.15);
+                color: white;
+                padding: 0.25rem 0.5rem;
+                border-radius: 4px;
+                font-size: 0.75rem;
+              "
+              >import { x } from './mod.js'</code
+            >
+            <code
+              style="
+                background: rgba(255, 255, 255, 0.15);
+                color: white;
+                padding: 0.25rem 0.5rem;
+                border-radius: 4px;
+                font-size: 0.75rem;
+              "
+              >await import('./lazy.js')</code
+            >
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>
+          <strong>javascript.ai</strong> — An open-source reference for modern
+          JavaScript.
+        </p>
+        <p class="text-sm" style="margin-top: 0.5rem">
+          <a href="https://github.com/yourusername/javascript.ai">GitHub</a>
+          &bull;
+          <a href="https://developer.mozilla.org">MDN Reference</a> &bull;
+          <a href="https://tc39.es">TC39 Specs</a>
+        </p>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

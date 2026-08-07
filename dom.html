@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM & Events — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="dom.html">DOM</a>
+          <a href="advanced.html">Advanced</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="dom.html">DOM & Events</a>
+        <a href="advanced.html">Advanced</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#selecting">Selecting Elements</a></li>
+            <li><a href="#modifying">Modifying DOM</a></li>
+            <li><a href="#events">Event Handling</a></li>
+            <li><a href="#delegation">Event Delegation</a></li>
+            <li><a href="#performance">DOM Performance</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 06</div>
+        <h1>DOM & Events</h1>
+        <p>
+          The Document Object Model (DOM) is the tree of HTML elements that
+          JavaScript can read and change.
+        </p>
+
+        <h2 id="selecting">Selecting Elements</h2>
+        <pre><code><span class="code-comment">// Single element</span>
+document.getElementById(<span class="code-string">'app'</span>);
+document.querySelector(<span class="code-string">'.card'</span>);        <span class="code-comment">// First match</span>
+document.querySelector(<span class="code-string">'[data-id="42"]'</span>); <span class="code-comment">// Attribute selector</span>
+
+<span class="code-comment">// Multiple elements</span>
+document.getElementsByClassName(<span class="code-string">'item'</span>); <span class="code-comment">// Live HTMLCollection</span>
+document.getElementsByTagName(<span class="code-string">'div'</span>);     <span class="code-comment">// Live HTMLCollection</span>
+document.querySelectorAll(<span class="code-string">'.item'</span>);        <span class="code-comment">// Static NodeList</span></code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--accent)">
+          <strong>💡 Key Difference</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            <code>getElementsBy*</code> returns a
+            <strong>live</strong> collection. If the DOM changes, the collection
+            updates automatically. <code>querySelectorAll</code> returns a
+            <strong>static</strong> snapshot.
+          </p>
+        </div>
+
+        <h2 id="modifying">Modifying the DOM</h2>
+        <pre><code><span class="code-keyword">const</span> box = document.createElement(<span class="code-string">'div'</span>);
+box.className = <span class="code-string">'box'</span>;
+box.textContent = <span class="code-string">'Hello'</span>;
+box.setAttribute(<span class="code-string">'data-id'</span>, <span class="code-string">'1'</span>);
+
+<span class="code-comment">// Insert</span>
+parent.appendChild(box);           <span class="code-comment">// At the end</span>
+parent.prepend(box);               <span class="code-comment">// At the start</span>
+parent.insertBefore(box, sibling); <span class="code-comment">// Before a specific node</span>
+
+<span class="code-comment">// Modern: insertAdjacentHTML / Element</span>
+parent.insertAdjacentHTML(<span class="code-string">'beforeend'</span>, <span class="code-string">'<span>New</span>'</span>);
+
+<span class="code-comment">// Remove</span>
+box.remove(); <span class="code-comment">// Modern</span>
+parent.removeChild(box); <span class="code-comment">// Legacy</span></code></pre>
+
+        <h3>innerHTML vs textContent vs innerText</h3>
+        <table>
+          <tr>
+            <th>Property</th>
+            <th>Parses HTML?</th>
+            <th>Triggers reflow?</th>
+            <th>Security risk?</th>
+          </tr>
+          <tr>
+            <td><code>innerHTML</code></td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes (XSS)</td>
+          </tr>
+          <tr>
+            <td><code>textContent</code></td>
+            <td>No</td>
+            <td>No</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td><code>innerText</code></td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+        </table>
+
+        <h2 id="events">Event Handling</h2>
+        <pre><code><span class="code-keyword">const</span> btn = document.querySelector(<span class="code-string">'#submit'</span>);
+
+<span class="code-comment">// Method 1: Inline (bad practice)</span>
+<span class="code-comment">// <button onclick="handle()">Submit</button></span>
+
+<span class="code-comment">// Method 2: Property (only one handler)</span>
+btn.onclick = <span class="code-function">function</span>() { console.log(<span class="code-string">'clicked'</span>); };
+
+<span class="code-comment">// Method 3: addEventListener (best practice)</span>
+btn.addEventListener(<span class="code-string">'click'</span>, handleClick);
+btn.addEventListener(<span class="code-string">'click'</span>, trackAnalytics); <span class="code-comment">// Multiple handlers allowed</span>
+
+<span class="code-keyword">function</span> <span class="code-function">handleClick</span>(event) {
+  event.preventDefault();   <span class="code-comment">// Stop default action</span>
+  event.stopPropagation();  <span class="code-comment">// Stop bubbling</span>
+  console.log(event.target); <span class="code-comment">// The element that triggered the event</span>
+  console.log(event.currentTarget); <span class="code-comment">// The element with the listener</span>
+}</code></pre>
+
+        <h3>Event Phases</h3>
+        <ol>
+          <li>
+            <strong>Capturing</strong> — Event travels from
+            <code>document</code> down to the target.
+          </li>
+          <li><strong>Target</strong> — Event reaches the target element.</li>
+          <li>
+            <strong>Bubbling</strong> — Event travels back up from target to
+            <code>document</code>.
+          </li>
+        </ol>
+        <pre><code><span class="code-comment">// Use capture phase (rarely needed)</span>
+element.addEventListener(<span class="code-string">'click'</span>, handler, <span class="code-number">true</span>);
+
+<span class="code-comment">// Stop bubbling</span>
+event.stopPropagation();
+
+<span class="code-comment">// Stop everything on this event</span>
+event.stopImmediatePropagation();</code></pre>
+
+        <h2 id="delegation">Event Delegation</h2>
+        <p>
+          Attach one listener to a parent instead of many listeners to children.
+          Efficient and handles dynamically added elements.
+        </p>
+        <pre><code><span class="code-comment">// Instead of adding a listener to every button...</span>
+<span class="code-keyword">const</span> list = document.querySelector(<span class="code-string">'#todo-list'</span>);
+
+list.addEventListener(<span class="code-string">'click'</span>, (e) => {
+  <span class="code-keyword">if</span> (e.target.matches(<span class="code-string">'.delete-btn'</span>)) {
+    e.target.closest(<span class="code-string">'li'</span>).remove();
+  }
+  <span class="code-keyword">if</span> (e.target.matches(<span class="code-string">'.edit-btn'</span>)) {
+    enterEditMode(e.target);
+  }
+});</code></pre>
+
+        <h2 id="performance">DOM Performance Tips</h2>
+        <pre><code><span class="code-comment">// BAD: Touching the DOM in a loop causes many reflows</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-number">1000</span>; i++) {
+  document.body.innerHTML += <span class="code-string">`<div>${i}</div>`</span>; <span class="code-comment">// 1000 reflows!</span>
+}
+
+<span class="code-comment">// GOOD: Use DocumentFragment</span>
+<span class="code-keyword">const</span> fragment = document.createDocumentFragment();
+<span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-number">1000</span>; i++) {
+  <span class="code-keyword">const</span> div = document.createElement(<span class="code-string">'div'</span>);
+  div.textContent = i;
+  fragment.appendChild(div);
+}
+document.body.appendChild(fragment); <span class="code-comment">// 1 reflow</span>
+
+<span class="code-comment">// GOOD: Use requestAnimationFrame for animations</span>
+<span class="code-keyword">function</span> <span class="code-function">animate</span>() {
+  element.style.transform = <span class="code-string">`translateX(${x}px)`</span>;
+  x += <span class="code-number">2</span>;
+  <span class="code-keyword">if</span> (x < <span class="code-number">300</span>) requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);</code></pre>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="modules.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← ESM</a
+          >
+          <a
+            href="advanced.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: Advanced →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interview Prep — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="interview.html">Interview</a>
+          <a href="projects.html">Projects</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="interview.html">Interview Prep</a>
+        <a href="projects.html">Projects</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">Categories</div>
+          <ul class="sidebar-list">
+            <li><a href="#basics">Basics</a></li>
+            <li><a href="#functions">Functions</a></li>
+            <li><a href="#async">Async</a></li>
+            <li><a href="#objects">Objects</a></li>
+            <li><a href="#dom">DOM</a></li>
+            <li><a href="#advanced">Advanced</a></li>
+            <li><a href="#coding">Coding Challenges</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Interview Prep</div>
+        <h1>JavaScript Interview Q&A</h1>
+        <p>
+          85+ questions organized by topic. Click a question to reveal the
+          answer.
+        </p>
+
+        <h2 id="basics">Basics</h2>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the difference between == and ===?<span class="qa-icon"
+              >▼</span
+            >
+          </button>
+          <div class="qa-answer">
+            <p>
+              <code>==</code> checks value with type coercion.
+              <code>===</code> checks value AND type without coercion. Always
+              use <code>===</code> to avoid unexpected conversions like
+              <code>0 == ""</code> being <code>true</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What are the falsy values in JavaScript?<span class="qa-icon"
+              >▼</span
+            >
+          </button>
+          <div class="qa-answer">
+            <p>
+              <code>""</code>, <code>0</code>, <code>-0</code>, <code>0n</code>,
+              <code>null</code>, <code>undefined</code>, <code>NaN</code>, and
+              <code>false</code>. Everything else is truthy, including
+              <code>"0"</code>, <code>[]</code>, and <code>{}</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the Temporal Dead Zone (TDZ)?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              The TDZ is the period between entering a block scope and the
+              actual declaration of a <code>let</code> or
+              <code>const</code> variable. Accessing the variable during this
+              time throws a <code>ReferenceError</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            Explain var, let, and const.<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              <code>var</code> is function-scoped, hoisted, and can be
+              redeclared. <code>let</code> is block-scoped and can be
+              reassigned. <code>const</code> is block-scoped and cannot be
+              reassigned (but object properties can still change).
+            </p>
+          </div>
+        </div>
+
+        <h2 id="functions">Functions & Scope</h2>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is a closure?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              A closure is a function that remembers variables from its outer
+              scope even after the outer function has finished executing.
+              Closures enable data privacy, factory functions, and maintaining
+              state in callbacks.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            Explain the 'this' keyword.<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              The value of <code>this</code> depends on how a function is
+              called: global object (non-strict),
+              <code>undefined</code> (strict), the object (method), the instance
+              (constructor), the DOM element (event handler), or the parent
+              scope (arrow function).
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the difference between call, apply, and bind?<span
+              class="qa-icon"
+              >▼</span
+            >
+          </button>
+          <div class="qa-answer">
+            <p>
+              <code>call</code> invokes a function with a given
+              <code>this</code> and comma-separated arguments.
+              <code>apply</code> does the same but takes an array of arguments.
+              <code>bind</code> returns a new function with
+              <code>this</code> permanently bound, without invoking it
+              immediately.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is an IIFE?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              An Immediately Invoked Function Expression is a function that runs
+              as soon as it is defined. It creates a private scope, preventing
+              variables from polluting the global namespace. Modern alternative:
+              use block scope with <code>{}</code>.
+            </p>
+          </div>
+        </div>
+
+        <h2 id="async">Async JavaScript</h2>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            Explain the Event Loop.<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              The event loop is a loop that checks if the call stack is empty.
+              If so, it pushes tasks from the microtask queue (Promises,
+              queueMicrotask) first, then from the macrotask queue (setTimeout,
+              setInterval, I/O). This allows JavaScript to handle async
+              operations on a single thread.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the difference between microtasks and macrotasks?<span
+              class="qa-icon"
+              >▼</span
+            >
+          </button>
+          <div class="qa-answer">
+            <p>
+              Microtasks have higher priority. After the current synchronous
+              code finishes, ALL microtasks run before the next macrotask.
+              Examples: Promises, <code>queueMicrotask</code>. Macrotasks:
+              <code>setTimeout</code>, <code>setInterval</code>, DOM events.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the output of: console.log('1');
+            setTimeout(()=>console.log('2'),0);
+            Promise.resolve().then(()=>console.log('3'));
+            console.log('4');?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              Output: <code>1, 4, 3, 2</code>. <code>1</code> and
+              <code>4</code> are synchronous. <code>3</code> is a microtask
+              (Promise) and runs before <code>2</code>, which is a macrotask
+              (setTimeout).
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the difference between Promise.all and
+            Promise.allSettled?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              <code>Promise.all</code> fails fast: if any promise rejects, the
+              entire result rejects. <code>Promise.allSettled</code> waits for
+              all promises regardless of outcome and returns an array of objects
+              with <code>status</code> and either <code>value</code> or
+              <code>reason</code>.
+            </p>
+          </div>
+        </div>
+
+        <h2 id="objects">Objects & Classes</h2>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the difference between Object.create and a constructor
+            function?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              <code>Object.create(proto)</code> creates an object with a
+              specified prototype directly. A constructor function uses
+              <code>new</code> to create an instance, sets <code>this</code> to
+              the new object, and links its prototype automatically.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the prototype chain?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              Every object has an internal link to another object called its
+              prototype. When you access a property, JavaScript walks up this
+              chain until it finds the property or reaches <code>null</code>.
+              This is how inheritance works in JS.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What are private class fields?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              Private fields use the <code>#</code> prefix. They are truly
+              private: not accessible outside the class, not enumerable, and not
+              inherited. This is a modern ES2022 feature.
+            </p>
+          </div>
+        </div>
+
+        <h2 id="dom">DOM & Browser</h2>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is event delegation?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              Event delegation attaches a single event listener to a parent
+              element instead of many listeners to child elements. Events bubble
+              up, so the parent can handle them. This is memory-efficient and
+              works for dynamically added elements.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the difference between event.target and
+            event.currentTarget?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              <code>event.target</code> is the element that actually triggered
+              the event. <code>event.currentTarget</code> is the element that
+              has the event listener attached. In delegation, they are often
+              different.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            How do you optimize DOM manipulation?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              Use DocumentFragment to batch insertions, minimize reflows by
+              batching style changes, use <code>requestAnimationFrame</code> for
+              animations, delegate events, and avoid reading layout properties
+              (like <code>offsetHeight</code>) in loops because they force
+              synchronous reflow.
+            </p>
+          </div>
+        </div>
+
+        <h2 id="advanced">Advanced</h2>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is a Proxy?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              A Proxy is an object that wraps another object and intercepts
+              operations like getting, setting, and deleting properties. It
+              enables validation, logging, and reactive systems.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What is the difference between a Map and a WeakMap?<span
+              class="qa-icon"
+              >▼</span
+            >
+          </button>
+          <div class="qa-answer">
+            <p>
+              <code>Map</code> allows any key type and keeps strong references.
+              <code>WeakMap</code> only allows objects as keys and holds weak
+              references, allowing garbage collection when no other references
+              exist. WeakMaps are not iterable.
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            What are generators useful for?<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <p>
+              Generators are useful for lazy evaluation, infinite sequences,
+              async flow control (before async/await), and implementing custom
+              iterables. They pause execution with <code>yield</code> and resume
+              with <code>next()</code>.
+            </p>
+          </div>
+        </div>
+
+        <h2 id="coding">Coding Challenges</h2>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            Implement Array.prototype.map from scratch.<span class="qa-icon"
+              >▼</span
+            >
+          </button>
+          <div class="qa-answer">
+            <pre><code>Array.prototype.myMap = <span class="code-keyword">function</span>(callback) {
+  <span class="code-keyword">const</span> result = [];
+  <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-keyword">this</span>.length; i++) {
+    result.push(callback(<span class="code-keyword">this</span>[i], i, <span class="code-keyword">this</span>));
+  }
+  <span class="code-keyword">return</span> result;
+};</code></pre>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            Implement debounce.<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <pre><code><span class="code-keyword">function</span> <span class="code-function">debounce</span>(fn, delay) {
+  <span class="code-keyword">let</span> timer;
+  <span class="code-keyword">return</span> <span class="code-keyword">function</span>(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(<span class="code-keyword">this</span>, args), delay);
+  };
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            Implement a deep clone function.<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <pre><code><span class="code-keyword">function</span> <span class="code-function">deepClone</span>(obj, hash = <span class="code-keyword">new</span> WeakMap()) {
+  <span class="code-keyword">if</span> (Object(obj) !== obj) <span class="code-keyword">return</span> obj;
+  <span class="code-keyword">if</span> (obj <span class="code-keyword">instanceof</span> Date) <span class="code-keyword">return new</span> Date(obj);
+  <span class="code-keyword">if</span> (obj <span class="code-keyword">instanceof</span> RegExp) <span class="code-keyword">return new</span> RegExp(obj);
+  <span class="code-keyword">if</span> (hash.has(obj)) <span class="code-keyword">return</span> hash.get(obj);
+
+  <span class="code-keyword">const</span> result = Array.isArray(obj) ? [] : {};
+  hash.set(obj, result);
+
+  <span class="code-keyword">for</span> (<span class="code-keyword">const</span> key <span class="code-keyword">in</span> obj) {
+    <span class="code-keyword">if</span> (Object.prototype.hasOwnProperty.call(obj, key)) {
+      result[key] = deepClone(obj[key], hash);
+    }
+  }
+  <span class="code-keyword">return</span> result;
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-question">
+            Flatten a nested array.<span class="qa-icon">▼</span>
+          </button>
+          <div class="qa-answer">
+            <pre><code><span class="code-keyword">function</span> <span class="code-function">flatten</span>(arr) {
+  <span class="code-keyword">return</span> arr.reduce((acc, val) =>
+    acc.concat(Array.isArray(val) ? flatten(val) : val), []);
+}
+
+<span class="code-comment">// Modern one-liner</span>
+<span class="code-keyword">const</span> flat = arr => arr.flat(Infinity);</code></pre>
+          </div>
+        </div>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="frameworks.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Frameworks</a
+          >
+          <a
+            href="projects.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: Projects →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

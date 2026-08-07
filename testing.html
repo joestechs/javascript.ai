@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testing — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="testing.html">Testing</a>
+          <a href="frameworks.html">Frameworks</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="testing.html">Testing</a>
+        <a href="frameworks.html">Frameworks</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#jest">Jest Basics</a></li>
+            <li><a href="#matchers">Matchers</a></li>
+            <li><a href="#async">Async Tests</a></li>
+            <li><a href="#mocking">Mocking</a></li>
+            <li><a href="#coverage">Coverage</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 08</div>
+        <h1>Testing JavaScript</h1>
+        <p>
+          Testing proves your code works. It also documents how your code should
+          be used.
+        </p>
+
+        <h2 id="jest">Jest Basics</h2>
+        <p>
+          Jest is the most popular JavaScript testing framework. It works out of
+          the box.
+        </p>
+        <pre><code><span class="code-comment">// sum.js</span>
+export <span class="code-keyword">function</span> <span class="code-function">sum</span>(a, b) {
+  <span class="code-keyword">return</span> a + b;
+}
+
+<span class="code-comment">// sum.test.js</span>
+import { sum } from <span class="code-string">'./sum.js'</span>;
+
+describe(<span class="code-string">'sum'</span>, () => {
+  test(<span class="code-string">'adds 1 + 2 to equal 3'</span>, () => {
+    expect(sum(<span class="code-number">1</span>, <span class="code-number">2</span>)).toBe(<span class="code-number">3</span>);
+  });
+
+  test(<span class="code-string">'adds negative numbers'</span>, () => {
+    expect(sum(-<span class="code-number">1</span>, -<span class="code-number">1</span>)).toBe(-<span class="code-number">2</span>);
+  });
+});</code></pre>
+
+        <h2 id="matchers">Common Matchers</h2>
+        <pre><code>expect(value).toBe(<span class="code-number">4</span>);           <span class="code-comment">// Exact equality (===)</span>
+expect(value).toEqual({a: <span class="code-number">1</span>});   <span class="code-comment">// Deep equality for objects</span>
+expect(value).toBeTruthy();      <span class="code-comment">// Any truthy value</span>
+expect(value).toBeFalsy();       <span class="code-comment">// Any falsy value</span>
+expect(value).toBeNull();        <span class="code-comment">// null</span>
+expect(value).toBeUndefined();   <span class="code-comment">// undefined</span>
+expect(value).toBeDefined();     <span class="code-comment">// Not undefined</span>
+expect(arr).toContain(<span class="code-string">'item'</span>); <span class="code-comment">// Array contains item</span>
+expect(str).toMatch(<span class="code-string">/hello/</span>);  <span class="code-comment">// Regex match</span>
+expect(fn).toThrow();            <span class="code-comment">// Function throws error</span></code></pre>
+
+        <h2 id="async">Async Tests</h2>
+        <pre><code><span class="code-comment">// Return a promise</span>
+test(<span class="code-string">'fetches user'</span>, () => {
+  <span class="code-keyword">return</span> fetchUser(<span class="code-number">1</span>).then(data => {
+    expect(data.name).toBe(<span class="code-string">'Ada'</span>);
+  });
+});
+
+<span class="code-comment">// Use async/await (cleaner)</span>
+test(<span class="code-string">'fetches user'</span>, <span class="code-keyword">async</span> () => {
+  <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> fetchUser(<span class="code-number">1</span>);
+  expect(data.name).toBe(<span class="code-string">'Ada'</span>);
+});
+
+<span class="code-comment">// Expect a rejection</span>
+test(<span class="code-string">'throws on bad id'</span>, <span class="code-keyword">async</span> () => {
+  <span class="code-keyword">await</span> expect(fetchUser(-<span class="code-number">1</span>)).rejects.toThrow(<span class="code-string">'Invalid'</span>);
+});</code></pre>
+
+        <h2 id="mocking">Mocking</h2>
+        <pre><code><span class="code-comment">// Mock a function</span>
+<span class="code-keyword">const</span> mockFn = jest.fn();
+mockFn(<span class="code-string">'arg'</span>);
+expect(mockFn).toHaveBeenCalledWith(<span class="code-string">'arg'</span>);
+expect(mockFn).toHaveBeenCalledTimes(<span class="code-number">1</span>);
+
+<span class="code-comment">// Mock a module</span>
+jest.mock(<span class="code-string">'./api.js'</span>, () => ({
+  fetchUser: jest.fn(() => Promise.resolve({ name: <span class="code-string">'Mock'</span> }))
+}));
+
+<span class="code-comment">// Spy on a method</span>
+<span class="code-keyword">const</span> spy = jest.spyOn(console, <span class="code-string">'log'</span>);
+console.log(<span class="code-string">'test'</span>);
+expect(spy).toHaveBeenCalled();
+spy.mockRestore(); <span class="code-comment">// Clean up</span></code></pre>
+
+        <h2 id="coverage">Test Coverage</h2>
+        <pre><code><span class="code-comment"># Run tests with coverage report</span>
+npx jest --coverage
+
+<span class="code-comment"># Coverage metrics:</span>
+<span class="code-comment"># - Statements: % of lines executed</span>
+<span class="code-comment"># - Branches: % of if/else paths taken</span>
+<span class="code-comment"># - Functions: % of functions called</span>
+<span class="code-comment"># - Lines: % of lines covered</span></code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--success)">
+          <strong>✅ TDD Cycle</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            Red → Write a failing test. Green → Write the minimum code to pass.
+            Refactor → Clean up while keeping tests green.
+          </p>
+        </div>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="advanced.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Advanced</a
+          >
+          <a
+            href="frameworks.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: Frameworks →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

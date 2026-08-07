@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fundamentals — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="functions.html">Functions</a>
+          <a href="async.html">Async</a>
+          <a href="modules.html">ESM</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="functions.html">Functions & Scope</a>
+        <a href="objects-classes.html">Objects & Classes</a>
+        <a href="async.html">Async JavaScript</a>
+        <a href="modules.html">ESM & Modules</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#vars">Variables</a></li>
+            <li><a href="#types">Types & Coercion</a></li>
+            <li><a href="#operators">Operators</a></li>
+            <li><a href="#control">Control Flow</a></li>
+            <li><a href="#strict">Strict Mode</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 01</div>
+        <h1>JavaScript Fundamentals</h1>
+        <p>
+          We start with the building blocks. Every line of JavaScript uses these
+          ideas. Master them first.
+        </p>
+
+        <h2 id="vars">Variables: var, let, and const</h2>
+        <p>
+          JavaScript has three ways to declare a variable. Each behaves
+          differently.
+        </p>
+
+        <table>
+          <tr>
+            <th>Keyword</th>
+            <th>Scope</th>
+            <th>Can Reassign?</th>
+            <th>Hoisted?</th>
+          </tr>
+          <tr>
+            <td><code>var</code></td>
+            <td>Function</td>
+            <td>Yes</td>
+            <td>Yes (initialized undefined)</td>
+          </tr>
+          <tr>
+            <td><code>let</code></td>
+            <td>Block</td>
+            <td>Yes</td>
+            <td>Yes (not initialized)</td>
+          </tr>
+          <tr>
+            <td><code>const</code></td>
+            <td>Block</td>
+            <td>No</td>
+            <td>Yes (not initialized)</td>
+          </tr>
+        </table>
+
+        <pre><code><span class="code-comment">// var is function-scoped</span>
+<span class="code-keyword">function</span> <span class="code-function">example</span>() {
+  <span class="code-keyword">if</span> (<span class="code-number">true</span>) {
+    <span class="code-keyword">var</span> x = <span class="code-number">10</span>;
+  }
+  console.log(x); <span class="code-comment">// 10 — x escapes the block</span>
+}
+
+<span class="code-comment">// let is block-scoped</span>
+<span class="code-keyword">function</span> <span class="code-function">example2</span>() {
+  <span class="code-keyword">if</span> (<span class="code-number">true</span>) {
+    <span class="code-keyword">let</span> y = <span class="code-number">10</span>;
+  }
+  <span class="code-comment">// console.log(y); // ReferenceError: y is not defined</span>
+}</code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--warning)">
+          <strong>⚠️ Common Mistake</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            Never use <code>var</code> in modern code. Use <code>const</code> by
+            default. Use <code>let</code> only when you must reassign.
+          </p>
+        </div>
+
+        <h2 id="types">Types and Type Coercion</h2>
+        <p>JavaScript has 8 data types. 7 are primitive. 1 is structural.</p>
+
+        <h3>The 8 Types</h3>
+        <ol>
+          <li><code>string</code> — Text data</li>
+          <li>
+            <code>number</code> — Integers and floats (including
+            <code>Infinity</code>, <code>NaN</code>)
+          </li>
+          <li>
+            <code>bigint</code> — Arbitrary-precision integers (e.g.,
+            <code>123n</code>)
+          </li>
+          <li>
+            <code>boolean</code> — <code>true</code> or <code>false</code>
+          </li>
+          <li><code>undefined</code> — A variable with no value</li>
+          <li><code>null</code> — Intentional absence of value</li>
+          <li><code>symbol</code> — Unique identifier</li>
+          <li>
+            <code>object</code> — Arrays, functions, dates, regex, and plain
+            objects
+          </li>
+        </ol>
+
+        <h3>typeof Quirks</h3>
+        <pre><code>typeof <span class="code-string">"hello"</span>;     <span class="code-comment">// "string"</span>
+typeof <span class="code-number">42</span>;          <span class="code-comment">// "number"</span>
+typeof <span class="code-number">42n</span>;         <span class="code-comment">// "bigint"</span>
+typeof <span class="code-number">true</span>;        <span class="code-comment">// "boolean"</span>
+typeof undefined;   <span class="code-comment">// "undefined"</span>
+typeof <span class="code-number">null</span>;        <span class="code-comment">// "object"  ← BUG from 1995. Never fixed.</span>
+typeof {};          <span class="code-comment">// "object"</span>
+typeof [];          <span class="code-comment">// "object"  ← Arrays are objects</span>
+typeof <span class="code-function">function</span>(){}; <span class="code-comment">// "function" ← Special treatment</span></code></pre>
+
+        <h3>Truthiness and Falsiness</h3>
+        <p>These 7 values are always falsy. Everything else is truthy.</p>
+        <pre><code><span class="code-keyword">if</span> (<span class="code-string">""</span> || <span class="code-number">0</span> || <span class="code-number">-0</span> || <span class="code-number">0n</span> || <span class="code-number">null</span> || <span class="code-number">undefined</span> || <span class="code-number">NaN</span>) {
+  <span class="code-comment">// This block NEVER runs</span>
+}</code></pre>
+
+        <h3>Coercion Rules</h3>
+        <pre><code><span class="code-string">"5"</span> + <span class="code-number">3</span>;     <span class="code-comment">// "53"  (number becomes string)</span>
+<span class="code-string">"5"</span> - <span class="code-number">3</span>;     <span class="code-comment">// 2     (string becomes number)</span>
+<span class="code-string">"5"</span> * <span class="code-string">"2"</span>;   <span class="code-comment">// 10    (both become number)</span>
+<span class="code-number">true</span> + <span class="code-number">true</span>; <span class="code-comment">// 2     (true coerces to 1)</span>
+<span class="code-string">""</span> == <span class="code-number">false</span>; <span class="code-comment">// true  (both coerced to 0)</span>
+<span class="code-string">""</span> === <span class="code-number">false</span>; <span class="code-comment">// false (different types)</span></code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--success)">
+          <strong>✅ Best Practice</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            Always use <code>===</code> and <code>!==</code>. Avoid
+            <code>==</code> unless you fully understand the Abstract Equality
+            Comparison Algorithm.
+          </p>
+        </div>
+
+        <h2 id="operators">Operators Deep Dive</h2>
+
+        <h3>Logical Operators</h3>
+        <p>
+          <code>&&</code> and <code>||</code> do not return booleans. They
+          return one of the operands.
+        </p>
+        <pre><code><span class="code-keyword">const</span> a = <span class="code-string">""</span> || <span class="code-string">"default"</span>;  <span class="code-comment">// "default"</span>
+<span class="code-keyword">const</span> b = <span class="code-string">"user"</span> && <span class="code-string">"ok"</span>;    <span class="code-comment">// "ok"</span>
+<span class="code-keyword">const</span> c = <span class="code-number">null</span> ?? <span class="code-string">"fallback"</span>; <span class="code-comment">// "fallback"  ← Nullish Coalescing</span></code></pre>
+
+        <h3>Optional Chaining</h3>
+        <pre><code><span class="code-keyword">const</span> user = { profile: <span class="code-number">null</span> };
+<span class="code-keyword">const</span> name = user.profile?.name; <span class="code-comment">// undefined (no error)</span></code></pre>
+
+        <h2 id="control">Control Flow</h2>
+
+        <h3>for...of vs for...in</h3>
+        <pre><code><span class="code-keyword">const</span> arr = [<span class="code-string">'a'</span>, <span class="code-string">'b'</span>];
+<span class="code-keyword">const</span> obj = { x: <span class="code-number">1</span>, y: <span class="code-number">2</span> };
+
+<span class="code-comment">// for...of → values (iterables)</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">const</span> val <span class="code-keyword">of</span> arr) console.log(val); <span class="code-comment">// a, b</span>
+
+<span class="code-comment">// for...in → keys (enumerable property names)</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">const</span> key <span class="code-keyword">in</span> obj) console.log(key); <span class="code-comment">// x, y</span>
+
+<span class="code-comment">// NEVER use for...in on arrays. It iterates over ALL enumerable keys including prototypes.</span></code></pre>
+
+        <h3>Switch Statement</h3>
+        <pre><code><span class="code-keyword">switch</span> (status) {
+  <span class="code-keyword">case</span> <span class="code-number">200</span>:
+  <span class="code-keyword">case</span> <span class="code-number">201</span>:
+    console.log(<span class="code-string">"Success"</span>);
+    <span class="code-keyword">break</span>;
+  <span class="code-keyword">case</span> <span class="code-number">404</span>:
+    console.log(<span class="code-string">"Not found"</span>);
+    <span class="code-keyword">break</span>;
+  <span class="code-keyword">default</span>:
+    console.log(<span class="code-string">"Unknown"</span>);
+}</code></pre>
+
+        <h2 id="strict">Strict Mode</h2>
+        <p>
+          Strict mode removes silent errors and fixes mistakes that make engines
+          hard to optimize.
+        </p>
+        <pre><code><span class="code-string">"use strict"</span>;
+
+x = <span class="code-number">3.14</span>; <span class="code-comment">// ReferenceError: x is not defined</span>
+<span class="code-keyword">delete</span> Object.prototype; <span class="code-comment">// TypeError</span></code></pre>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="index.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Home</a
+          >
+          <a
+            href="functions.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: Functions →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong> — Open Source Reference</p>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

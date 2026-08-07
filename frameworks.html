@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frameworks Guide — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="frameworks.html">Frameworks</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="frameworks.html">Frameworks</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#react">React</a></li>
+            <li><a href="#vue">Vue</a></li>
+            <li><a href="#angular">Angular</a></li>
+            <li><a href="#svelte">Svelte</a></li>
+            <li><a href="#node">Node.js</a></li>
+            <li><a href="#bundlers">Bundlers</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 09</div>
+        <h1>Frameworks & Ecosystem</h1>
+        <p>
+          Frameworks help you build apps faster. But you must understand vanilla
+          JavaScript first.
+        </p>
+
+        <h2 id="react">React</h2>
+        <p>A library for building UIs with components. Uses a virtual DOM.</p>
+        <pre><code><span class="code-comment">// Functional Component with Hooks</span>
+<span class="code-keyword">import</span> { useState, useEffect } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-keyword">function</span> <span class="code-function">Counter</span>() {
+  <span class="code-keyword">const</span> [count, setCount] = useState(<span class="code-number">0</span>);
+
+  useEffect(() => {
+    document.title = <span class="code-string">`Count: ${count}`</span>;
+  }, [count]);
+
+  <span class="code-keyword">return</span> (
+    <span class="code-tag">&lt;button</span> onClick={() => setCount(c => c + <span class="code-number">1</span>)}<span class="code-tag">&gt;</span>
+      Clicked {count} times
+    <span class="code-tag">&lt;/button&gt;</span>
+  );
+}</code></pre>
+
+        <h3>Key React Concepts</h3>
+        <ul>
+          <li><strong>JSX</strong> — Syntax extension that looks like HTML.</li>
+          <li><strong>Components</strong> — Reusable UI building blocks.</li>
+          <li>
+            <strong>Props</strong> — Read-only data passed from parent to child.
+          </li>
+          <li>
+            <strong>State</strong> — Mutable data managed within a component.
+          </li>
+          <li>
+            <strong>Hooks</strong> — Functions like <code>useState</code>,
+            <code>useEffect</code>, <code>useContext</code>.
+          </li>
+          <li>
+            <strong>Virtual DOM</strong> — In-memory representation of the real
+            DOM.
+          </li>
+        </ul>
+
+        <h2 id="vue">Vue</h2>
+        <p>A progressive framework. Easy to adopt incrementally.</p>
+        <pre><code><span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { ref, computed } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>;
+
+<span class="code-keyword">const</span> count = ref(<span class="code-number">0</span>);
+<span class="code-keyword">const</span> doubled = computed(() => count.value * <span class="code-number">2</span>);
+
+<span class="code-keyword">function</span> <span class="code-function">increment</span>() {
+  count.value++;
+}
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;button</span> @click=<span class="code-string">"increment"</span><span class="code-tag">&gt;</span>{{ count }}<span class="code-tag">&lt;/button&gt;</span>
+  <span class="code-tag">&lt;p&gt;</span>Doubled: {{ doubled }}<span class="code-tag">&lt;/p&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+
+        <h2 id="angular">Angular</h2>
+        <p>A full-featured framework by Google. Uses TypeScript by default.</p>
+        <ul>
+          <li><strong>Components</strong> — Class + Template + Styles.</li>
+          <li>
+            <strong>Dependency Injection</strong> — Built-in IoC container.
+          </li>
+          <li>
+            <strong>RxJS</strong> — Reactive programming with Observables.
+          </li>
+          <li>
+            <strong>Directives</strong> — <code>*ngIf</code>,
+            <code>*ngFor</code>, custom attribute directives.
+          </li>
+        </ul>
+
+        <h2 id="svelte">Svelte</h2>
+        <p>
+          A compiler, not a runtime library. Converts components to efficient
+          vanilla JS.
+        </p>
+        <pre><code><span class="code-tag">&lt;script&gt;</span>
+  <span class="code-keyword">let</span> count = <span class="code-number">0</span>;
+  $<span class="code-keyword">:</span> doubled = count * <span class="code-number">2</span>; <span class="code-comment">// Reactive statement</span>
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;button</span> on:click={() => count++}<span class="code-tag">&gt;</span>
+  Count: {count}
+<span class="code-tag">&lt;/button&gt;</span>
+<span class="code-tag">&lt;p&gt;</span>Doubled: {doubled}<span class="code-tag">&lt;/p&gt;</span></code></pre>
+
+        <h2 id="node">Node.js</h2>
+        <p>JavaScript on the server. Event-driven, non-blocking I/O.</p>
+        <pre><code><span class="code-comment">// Simple HTTP server</span>
+<span class="code-keyword">const</span> http = require(<span class="code-string">'http'</span>);
+
+<span class="code-keyword">const</span> server = http.createServer((req, res) => {
+  res.writeHead(<span class="code-number">200</span>, { <span class="code-string">'Content-Type'</span>: <span class="code-string">'text/plain'</span> });
+  res.end(<span class="code-string">'Hello World\n'</span>);
+});
+
+server.listen(<span class="code-number">3000</span>);
+
+<span class="code-comment">// Modern: Express.js</span>
+<span class="code-keyword">const</span> express = require(<span class="code-string">'express'</span>);
+<span class="code-keyword">const</span> app = express();
+
+app.get(<span class="code-string">'/'</span>, (req, res) => res.json({ message: <span class="code-string">'Hello'</span> }));
+app.listen(<span class="code-number">3000</span>);</code></pre>
+
+        <h2 id="bundlers">Bundlers & Tooling</h2>
+        <table>
+          <tr>
+            <th>Tool</th>
+            <th>Purpose</th>
+            <th>Speed</th>
+          </tr>
+          <tr>
+            <td>Webpack</td>
+            <td>Module bundler</td>
+            <td>Slow</td>
+          </tr>
+          <tr>
+            <td>Vite</td>
+            <td>Dev server + bundler</td>
+            <td>Very fast</td>
+          </tr>
+          <tr>
+            <td>Rollup</td>
+            <td>Library bundler</td>
+            <td>Fast</td>
+          </tr>
+          <tr>
+            <td>esbuild</td>
+            <td>Go-based bundler</td>
+            <td>Extremely fast</td>
+          </tr>
+          <tr>
+            <td>Parcel</td>
+            <td>Zero-config bundler</td>
+            <td>Fast</td>
+          </tr>
+        </table>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="testing.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Testing</a
+          >
+          <a
+            href="interview.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: Interview →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

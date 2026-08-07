@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Objects & Classes — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="functions.html">Functions</a>
+          <a href="objects-classes.html">Objects</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="functions.html">Functions</a>
+        <a href="objects-classes.html">Objects & Classes</a>
+        <a href="async.html">Async</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#objects">Object Basics</a></li>
+            <li><a href="#prototypes">Prototypes</a></li>
+            <li><a href="#inheritance">Inheritance</a></li>
+            <li><a href="#classes">ES6 Classes</a></li>
+            <li><a href="#private">Private Fields</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 03</div>
+        <h1>Objects & Classes</h1>
+        <p>
+          JavaScript is a prototype-based language. Classes are syntactic sugar
+          over prototypes.
+        </p>
+
+        <h2 id="objects">Object Creation Patterns</h2>
+
+        <h3>Object Literal</h3>
+        <pre><code><span class="code-keyword">const</span> user = {
+  name: <span class="code-string">"Ada"</span>,
+  age: <span class="code-number">30</span>,
+  greet() {
+    <span class="code-keyword">return</span> <span class="code-string">"Hello"</span>;
+  }
+};
+
+<span class="code-comment">// Computed property names</span>
+<span class="code-keyword">const</span> key = <span class="code-string">"id"</span>;
+<span class="code-keyword">const</span> item = { [key]: <span class="code-number">123</span> }; <span class="code-comment">// { id: 123 }</span></code></pre>
+
+        <h3>Object Methods</h3>
+        <pre><code>Object.keys(user);    <span class="code-comment">// ["name", "age", "greet"]</span>
+Object.values(user);  <span class="code-comment">// ["Ada", 30, ƒ]</span>
+Object.entries(user); <span class="code-comment">// [["name","Ada"], ["age",30], ...]</span>
+
+<span class="code-comment">// Check property existence</span>
+<span class="code-string">"name"</span> <span class="code-keyword">in</span> user;        <span class="code-comment">// true</span>
+user.hasOwnProperty(<span class="code-string">"name"</span>); <span class="code-comment">// true (ignores prototype chain)</span></code></pre>
+
+        <h2 id="prototypes">Prototypes</h2>
+        <p>
+          Every object has an internal link to another object called its
+          <strong>prototype</strong>. When you access a property, JavaScript
+          looks up the chain.
+        </p>
+
+        <pre><code><span class="code-keyword">const</span> animal = {
+  eats: <span class="code-number">true</span>,
+  walk() {
+    console.log(<span class="code-string">"walking"</span>);
+  }
+};
+
+<span class="code-keyword">const</span> rabbit = {
+  jumps: <span class="code-number">true</span>
+};
+
+<span class="code-comment">// Set prototype</span>
+Object.setPrototypeOf(rabbit, animal);
+
+rabbit.walk();   <span class="code-comment">// "walking" — found on animal</span>
+rabbit.eats;     <span class="code-comment">// true</span></code></pre>
+
+        <h3>Constructor Functions (Old Style)</h3>
+        <pre><code><span class="code-keyword">function</span> <span class="code-function">Animal</span>(name) {
+  <span class="code-keyword">this</span>.name = name;
+}
+
+Animal.prototype.speak = <span class="code-keyword">function</span>() {
+  console.log(<span class="code-string">"${this.name} makes a sound"</span>);
+};
+
+<span class="code-keyword">const</span> dog = <span class="code-keyword">new</span> Animal(<span class="code-string">"Rex"</span>);
+dog.speak(); <span class="code-comment">// "Rex makes a sound"</span></code></pre>
+
+        <h2 id="classes">ES6 Classes</h2>
+        <p>
+          Classes are cleaner syntax. Under the hood, they still use prototypes.
+        </p>
+
+        <pre><code><span class="code-keyword">class</span> <span class="code-function">Animal</span> {
+  <span class="code-keyword">constructor</span>(name) {
+    <span class="code-keyword">this</span>.name = name;
+  }
+  
+  speak() {
+    console.log(<span class="code-string">`${this.name} makes a sound`</span>);
+  }
+  
+  <span class="code-comment">// Static method — belongs to the class, not instances</span>
+  <span class="code-keyword">static</span> isAnimal(obj) {
+    <span class="code-keyword">return</span> obj <span class="code-keyword">instanceof</span> Animal;
+  }
+}
+
+<span class="code-keyword">class</span> <span class="code-function">Dog</span> <span class="code-keyword">extends</span> Animal {
+  <span class="code-keyword">constructor</span>(name, breed) {
+    <span class="code-keyword">super</span>(name); <span class="code-comment">// Must call super() before using 'this'</span>
+    <span class="code-keyword">this</span>.breed = breed;
+  }
+  
+  speak() {
+    <span class="code-keyword">super</span>.speak(); <span class="code-comment">// Call parent method</span>
+    console.log(<span class="code-string">`${this.name} barks`</span>);
+  }
+}</code></pre>
+
+        <h2 id="private">Private Class Fields (Modern)</h2>
+        <pre><code><span class="code-keyword">class</span> <span class="code-function">BankAccount</span> {
+  #balance = <span class="code-number">0</span>; <span class="code-comment">// Private field</span>
+  
+  deposit(amount) {
+    <span class="code-keyword">if</span> (amount > <span class="code-number">0</span>) <span class="code-keyword">this</span>.#balance += amount;
+  }
+  
+  getBalance() {
+    <span class="code-keyword">return</span> <span class="code-keyword">this</span>.#balance;
+  }
+}
+
+<span class="code-keyword">const</span> acc = <span class="code-keyword">new</span> BankAccount();
+acc.deposit(<span class="code-number">100</span>);
+console.log(acc.getBalance()); <span class="code-comment">// 100</span>
+console.log(acc.#balance);     <span class="code-comment">// SyntaxError: Private field must be declared</span></code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--warning)">
+          <strong>⚠️ Important</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            Private fields (<code>#</code>) are truly private. They are not
+            accessible from outside the class or even from subclasses. Use
+            protected-like patterns with symbols or closures if you need
+            inheritance access.
+          </p>
+        </div>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="functions.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Functions</a
+          >
+          <a
+            href="async.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: Async →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

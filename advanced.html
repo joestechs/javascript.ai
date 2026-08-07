@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Concepts — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="advanced.html">Advanced</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="advanced.html">Advanced Concepts</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#hoisting">Hoisting & TDZ</a></li>
+            <li><a href="#prototypes">Prototypes</a></li>
+            <li><a href="#generators">Generators</a></li>
+            <li><a href="#symbols">Symbols</a></li>
+            <li><a href="#proxy">Proxy & Reflect</a></li>
+            <li><a href="#weakmap">WeakMap & WeakSet</a></li>
+            <li><a href="#memoization">Memoization</a></li>
+            <li><a href="#debounce">Debounce & Throttle</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 07</div>
+        <h1>Advanced Concepts</h1>
+        <p>
+          These are the topics that separate junior developers from senior ones.
+        </p>
+
+        <h2 id="hoisting">Hoisting & Temporal Dead Zone (TDZ)</h2>
+        <p>
+          Hoisting moves declarations to the top of their scope during
+          compilation.
+        </p>
+        <pre><code>console.log(a); <span class="code-comment">// undefined (var is hoisted and initialized)</span>
+<span class="code-keyword">var</span> a = <span class="code-number">5</span>;
+
+console.log(b); <span class="code-comment">// ReferenceError: Cannot access 'b' before initialization</span>
+<span class="code-keyword">let</span> b = <span class="code-number">10</span>;
+
+<span class="code-comment">// The TDZ is the zone between the start of the block and the let/const declaration.</span>
+<span class="code-comment">// During the TDZ, the variable exists but cannot be accessed.</span></code></pre>
+
+        <h2 id="prototypes">The Prototype Chain</h2>
+        <pre><code><span class="code-keyword">const</span> obj = {};
+console.log(obj.toString); <span class="code-comment">// Works! Inherited from Object.prototype</span>
+
+<span class="code-comment">// Check the prototype</span>
+Object.getPrototypeOf(obj) === Object.prototype; <span class="code-comment">// true</span>
+
+<span class="code-comment">// Create an object with no prototype</span>
+<span class="code-keyword">const</span> dict = Object.create(<span class="code-number">null</span>);
+console.log(dict.toString); <span class="code-comment">// undefined</span></code></pre>
+
+        <h2 id="generators">Generators</h2>
+        <p>
+          Generators are functions that can pause and resume. They return an
+          iterator.
+        </p>
+        <pre><code><span class="code-keyword">function</span>* <span class="code-function">countUp</span>(max) {
+  <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i <= max; i++) {
+    <span class="code-keyword">yield</span> i; <span class="code-comment">// Pause here, return i</span>
+  }
+}
+
+<span class="code-keyword">const</span> gen = countUp(<span class="code-number">3</span>);
+console.log(gen.next()); <span class="code-comment">// { value: 0, done: false }</span>
+console.log(gen.next()); <span class="code-comment">// { value: 1, done: false }</span>
+console.log(gen.next()); <span class="code-comment">// { value: 2, done: false }</span>
+console.log(gen.next()); <span class="code-comment">// { value: 3, done: false }</span>
+console.log(gen.next()); <span class="code-comment">// { value: undefined, done: true }</span>
+
+<span class="code-comment">// Generators are iterable</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">const</span> n <span class="code-keyword">of</span> countUp(<span class="code-number">5</span>)) {
+  console.log(n);
+}</code></pre>
+
+        <h2 id="symbols">Symbols</h2>
+        <p>
+          Symbols are unique, immutable primitive values. They are great for
+          creating private-ish object keys.
+        </p>
+        <pre><code><span class="code-keyword">const</span> id = Symbol(<span class="code-string">'id'</span>);
+<span class="code-keyword">const</span> user = { name: <span class="code-string">"Ada"</span>, [id]: <span class="code-number">123</span> };
+
+console.log(user[id]); <span class="code-comment">// 123</span>
+console.log(Object.keys(user)); <span class="code-comment">// ["name"] — Symbol keys are hidden</span>
+console.log(Object.getOwnPropertySymbols(user)); <span class="code-comment">// [Symbol(id)]</span>
+
+<span class="code-comment">// Well-known symbols</span>
+<span class="code-keyword">const</span> iterable = {
+  [Symbol.iterator]: <span class="code-keyword">function</span>* () {
+    <span class="code-keyword">yield</span> <span class="code-number">1</span>;
+    <span class="code-keyword">yield</span> <span class="code-number">2</span>;
+    <span class="code-keyword">yield</span> <span class="code-number">3</span>;
+  }
+};</code></pre>
+
+        <h2 id="proxy">Proxy & Reflect</h2>
+        <p>A Proxy wraps an object and intercepts operations on it.</p>
+        <pre><code><span class="code-keyword">const</span> handler = {
+  get(target, prop) {
+    <span class="code-keyword">if</span> (prop <span class="code-keyword">in</span> target) {
+      <span class="code-keyword">return</span> target[prop];
+    }
+    <span class="code-keyword">return</span> <span class="code-string">`Property ${String(prop)} not found`</span>;
+  },
+  set(target, prop, value) {
+    <span class="code-keyword">if</span> (<span class="code-keyword">typeof</span> value !== <span class="code-string">'number'</span>) {
+      <span class="code-keyword">throw new</span> TypeError(<span class="code-string">'Must be a number'</span>);
+    }
+    target[prop] = value;
+    <span class="code-keyword">return</span> <span class="code-number">true</span>;
+  }
+};
+
+<span class="code-keyword">const</span> nums = <span class="code-keyword">new</span> Proxy({}, handler);
+nums.a = <span class="code-number">10</span>;
+console.log(nums.a);   <span class="code-comment">// 10</span>
+console.log(nums.b);   <span class="code-comment">// "Property b not found"</span>
+nums.c = <span class="code-string">'hello'</span>;    <span class="code-comment">// TypeError</span></code></pre>
+
+        <h2 id="weakmap">WeakMap & WeakSet</h2>
+        <p>
+          WeakMap keys must be objects. They do not prevent garbage collection.
+        </p>
+        <pre><code><span class="code-keyword">const</span> cache = <span class="code-keyword">new</span> WeakMap();
+
+<span class="code-keyword">function</span> <span class="code-function">process</span>(obj) {
+  <span class="code-keyword">if</span> (!cache.has(obj)) {
+    <span class="code-keyword">const</span> result = heavyCalculation(obj);
+    cache.set(obj, result);
+  }
+  <span class="code-keyword">return</span> cache.get(obj);
+}
+
+<span class="code-comment">// When 'obj' is no longer referenced elsewhere, it can be garbage collected.</span>
+<span class="code-comment">// The WeakMap entry disappears automatically.</span></code></pre>
+
+        <h2 id="memoization">Memoization Pattern</h2>
+        <pre><code><span class="code-keyword">function</span> <span class="code-function">memoize</span>(fn) {
+  <span class="code-keyword">const</span> cache = <span class="code-keyword">new</span> Map();
+  <span class="code-keyword">return</span> <span class="code-keyword">function</span>(...args) {
+    <span class="code-keyword">const</span> key = JSON.stringify(args);
+    <span class="code-keyword">if</span> (cache.has(key)) {
+      <span class="code-keyword">return</span> cache.get(key);
+    }
+    <span class="code-keyword">const</span> result = fn.apply(<span class="code-keyword">this</span>, args);
+    cache.set(key, result);
+    <span class="code-keyword">return</span> result;
+  };
+}
+
+<span class="code-keyword">const</span> fib = memoize(<span class="code-keyword">function</span>(n) {
+  <span class="code-keyword">if</span> (n < <span class="code-number">2</span>) <span class="code-keyword">return</span> n;
+  <span class="code-keyword">return</span> fib(n - <span class="code-number">1</span>) + fib(n - <span class="code-number">2</span>);
+});
+
+console.log(fib(<span class="code-number">50</span>)); <span class="code-comment">// Instant, thanks to memoization</span></code></pre>
+
+        <h2 id="debounce">Debounce & Throttle</h2>
+        <pre><code><span class="code-comment">// Debounce: run after user stops typing</span>
+<span class="code-keyword">function</span> <span class="code-function">debounce</span>(fn, delay) {
+  <span class="code-keyword">let</span> timer;
+  <span class="code-keyword">return</span> <span class="code-keyword">function</span>(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(<span class="code-keyword">this</span>, args), delay);
+  };
+}
+
+searchInput.addEventListener(<span class="code-string">'input'</span>, debounce((e) => {
+  fetchResults(e.target.value);
+}, <span class="code-number">300</span>));
+
+<span class="code-comment">// Throttle: run at most once per interval</span>
+<span class="code-keyword">function</span> <span class="code-function">throttle</span>(fn, limit) {
+  <span class="code-keyword">let</span> inThrottle;
+  <span class="code-keyword">return</span> <span class="code-keyword">function</span>(...args) {
+    <span class="code-keyword">if</span> (!inThrottle) {
+      fn.apply(<span class="code-keyword">this</span>, args);
+      inThrottle = <span class="code-number">true</span>;
+      setTimeout(() => inThrottle = <span class="code-number">false</span>, limit);
+    }
+  };
+}
+
+window.addEventListener(<span class="code-string">'scroll'</span>, throttle(() => {
+  console.log(<span class="code-string">'Scrolled!'</span>);
+}, <span class="code-number">200</span>));</code></pre>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="dom.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← DOM</a
+          >
+          <a
+            href="testing.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: Testing →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

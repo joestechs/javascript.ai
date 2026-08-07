@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Async JavaScript — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="async.html">Async</a>
+          <a href="modules.html">ESM</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="functions.html">Functions</a>
+        <a href="async.html">Async JavaScript</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#eventloop">Event Loop</a></li>
+            <li><a href="#callbacks">Callbacks</a></li>
+            <li><a href="#promises">Promises</a></li>
+            <li><a href="#asyncawait">Async/Await</a></li>
+            <li><a href="#parallel">Parallel vs Sequential</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 04</div>
+        <h1>Async JavaScript</h1>
+        <p>
+          JavaScript is single-threaded. Async programming lets us do many
+          things at once without blocking.
+        </p>
+
+        <h2 id="eventloop">The Event Loop</h2>
+        <p>The event loop is simple. It is a loop that checks:</p>
+        <ol>
+          <li>Is the call stack empty?</li>
+          <li>If yes, push the oldest task from the microtask queue.</li>
+          <li>
+            If the microtask queue is empty, push one task from the macrotask
+            queue.
+          </li>
+          <li>Repeat.</li>
+        </ol>
+
+        <pre><code><span class="code-comment">// Synchronous</span>
+console.log(<span class="code-string">"1"</span>);
+
+<span class="code-comment">// Macrotask</span>
+setTimeout(() => console.log(<span class="code-string">"2"</span>), <span class="code-number">0</span>);
+
+<span class="code-comment">// Microtask</span>
+Promise.resolve().then(() => console.log(<span class="code-string">"3"</span>));
+
+<span class="code-comment">// Synchronous</span>
+console.log(<span class="code-string">"4"</span>);
+
+<span class="code-comment">// Output: 1, 4, 3, 2</span>
+<span class="code-comment">// Microtasks (Promises) run BEFORE macrotasks (setTimeout)</span></code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--accent)">
+          <strong>💡 Memory Trick</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            Microtasks are like VIPs. They always cut in line before regular
+            (macro) tasks. If you keep adding microtasks, macrotasks starve.
+          </p>
+        </div>
+
+        <h2 id="callbacks">Callbacks</h2>
+        <p>
+          A callback is a function passed into another function to run later.
+        </p>
+        <pre><code><span class="code-keyword">function</span> <span class="code-function">fetchData</span>(callback) {
+  setTimeout(() => {
+    callback(<span class="code-string">"data"</span>);
+  }, <span class="code-number">1000</span>);
+}
+
+fetchData((result) => {
+  console.log(result); <span class="code-comment">// "data"</span>
+});</code></pre>
+
+        <h3>Callback Hell</h3>
+        <pre><code>getData(<span class="code-function">function</span>(a) {
+  getMoreData(a, <span class="code-function">function</span>(b) {
+    getMoreData(b, <span class="code-function">function</span>(c) {
+      getMoreData(c, <span class="code-function">function</span>(d) {
+        console.log(d); <span class="code-comment">// Deep nesting = hard to read</span>
+      });
+    });
+  });
+});</code></pre>
+
+        <h2 id="promises">Promises</h2>
+        <p>
+          A Promise is an object representing a future value. It has three
+          states: pending, fulfilled, or rejected.
+        </p>
+
+        <pre><code><span class="code-keyword">const</span> promise = <span class="code-keyword">new</span> Promise((resolve, reject) => {
+  <span class="code-keyword">const</span> success = <span class="code-number">true</span>;
+
+  <span class="code-keyword">if</span> (success) {
+    resolve(<span class="code-string">"It worked!"</span>);
+  } <span class="code-keyword">else</span> {
+    reject(<span class="code-keyword">new</span> Error(<span class="code-string">"It failed"</span>));
+  }
+});
+
+promise
+  .then(value => console.log(value))   <span class="code-comment">// "It worked!"</span>
+  .catch(err => console.error(err))    <span class="code-comment">// Runs on reject</span>
+  .finally(() => console.log(<span class="code-string">"Done"</span>)); <span class="code-comment">// Always runs</span></code></pre>
+
+        <h3>Promise.all</h3>
+        <p>Wait for all promises. If one fails, everything fails.</p>
+        <pre><code><span class="code-keyword">const</span> urls = [<span class="code-string">'/api/1'</span>, <span class="code-string">'/api/2'</span>, <span class="code-string">'/api/3'</span>];
+<span class="code-keyword">const</span> promises = urls.map(url => fetch(url));
+
+<span class="code-keyword">const</span> results = <span class="code-keyword">await</span> Promise.all(promises);</code></pre>
+
+        <h3>Promise.allSettled</h3>
+        <p>
+          Wait for all promises. Never fails. Returns status and value/reason
+          for each.
+        </p>
+        <pre><code><span class="code-keyword">const</span> results = <span class="code-keyword">await</span> Promise.allSettled([
+  Promise.resolve(<span class="code-string">"ok"</span>),
+  Promise.reject(<span class="code-string">"fail"</span>)
+]);
+<span class="code-comment">// [{status:"fulfilled", value:"ok"}, {status:"rejected", reason:"fail"}]</span></code></pre>
+
+        <h3>Promise.race</h3>
+        <p>Returns the first settled promise (fastest wins).</p>
+        <pre><code><span class="code-keyword">const</span> winner = <span class="code-keyword">await</span> Promise.race([
+  fetch(<span class="code-string">'/api/fast'</span>),
+  <span class="code-keyword">new</span> Promise((_, reject) =>
+    setTimeout(() => reject(<span class="code-keyword">new</span> Error(<span class="code-string">"Timeout"</span>)), <span class="code-number">5000</span>)
+  )
+]);</code></pre>
+
+        <h2 id="asyncawait">Async / Await</h2>
+        <p>
+          <code>async</code> makes a function return a Promise.
+          <code>await</code> pauses the function until the Promise settles.
+        </p>
+
+        <pre><code><span class="code-keyword">async function</span> <span class="code-function">getUser</span>(id) {
+  <span class="code-keyword">try</span> {
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> fetch(<span class="code-string">`/api/users/${id}`</span>);
+    <span class="code-keyword">if</span> (!response.ok) <span class="code-keyword">throw new</span> Error(<span class="code-string">"HTTP error"</span>);
+    <span class="code-keyword">return</span> <span class="code-keyword">await</span> response.json();
+  } <span class="code-keyword">catch</span> (err) {
+    console.error(<span class="code-string">"Fetch failed:"</span>, err);
+    <span class="code-keyword">return</span> <span class="code-number">null</span>;
+  }
+}</code></pre>
+
+        <h3>Top-Level Await</h3>
+        <p>
+          Modern JS allows <code>await</code> at the top level of ES modules.
+        </p>
+        <pre><code><span class="code-comment">// main.js (ES Module)</span>
+<span class="code-keyword">const</span> data = <span class="code-keyword">await</span> fetch(<span class="code-string">'/api/config'</span>);
+export <span class="code-keyword">const</span> config = <span class="code-keyword">await</span> data.json();</code></pre>
+
+        <h2 id="parallel">Parallel vs Sequential</h2>
+        <p>Be careful. <code>await</code> inside a loop runs sequentially.</p>
+
+        <pre><code><span class="code-comment">// SEQUENTIAL (slow)</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">const</span> id <span class="code-keyword">of</span> ids) {
+  <span class="code-keyword">await</span> fetchUser(id); <span class="code-comment">// Waits for each one</span>
+}
+
+<span class="code-comment">// PARALLEL (fast)</span>
+<span class="code-keyword">const</span> promises = ids.map(id => fetchUser(id));
+<span class="code-keyword">const</span> users = <span class="code-keyword">await</span> Promise.all(promises);
+
+<span class="code-comment">// CONTROLLED PARALLEL (batch of 3)</span>
+<span class="code-keyword">async function</span> <span class="code-function">batchFetch</span>(ids, batchSize = <span class="code-number">3</span>) {
+  <span class="code-keyword">const</span> results = [];
+  <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < ids.length; i += batchSize) {
+    <span class="code-keyword">const</span> batch = ids.slice(i, i + batchSize);
+    <span class="code-keyword">const</span> batchResults = <span class="code-keyword">await</span> Promise.all(
+      batch.map(id => fetchUser(id))
+    );
+    results.push(...batchResults);
+  }
+  <span class="code-keyword">return</span> results;
+}</code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--warning)">
+          <strong>⚠️ Interview Trap</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            What is the output of:
+            <code
+              >for (var i = 0; i < 3; i++) { setTimeout(() => console.log(i),
+              0); }</code
+            >? It prints 3, 3, 3. Use <code>let</code> or an IIFE to capture the
+            current value.
+          </p>
+        </div>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="objects-classes.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Objects</a
+          >
+          <a
+            href="modules.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: ESM →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

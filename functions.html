@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Functions & Scope — javascript.ai</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container navbar-inner">
+        <a href="index.html" class="logo"
+          ><div class="logo-icon">JS</div>
+          javascript.ai</a
+        >
+        <div class="nav-links">
+          <a href="fundamentals.html">Fundamentals</a>
+          <a href="functions.html">Functions</a>
+          <a href="async.html">Async</a>
+          <a href="interview.html" class="btn">Interview Prep</a>
+        </div>
+        <button class="theme-toggle">🌙</button>
+        <button class="mobile-menu-btn">☰</button>
+      </div>
+      <div class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="fundamentals.html">Fundamentals</a>
+        <a href="functions.html">Functions & Scope</a>
+        <a href="objects-classes.html">Objects & Classes</a>
+        <a href="async.html">Async</a>
+        <a href="interview.html">Interview Prep</a>
+      </div>
+    </nav>
+
+    <main class="container page-layout">
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="sidebar-title">On This Page</div>
+          <ul class="sidebar-list">
+            <li><a href="#declarations">Declarations</a></li>
+            <li><a href="#arrow">Arrow Functions</a></li>
+            <li><a href="#scope">Scope</a></li>
+            <li><a href="#closures">Closures</a></li>
+            <li><a href="#this">The 'this' Keyword</a></li>
+            <li><a href="#iife">IIFE</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <article>
+        <div class="badge badge-accent mb-4">Chapter 02</div>
+        <h1>Functions & Scope</h1>
+        <p>
+          Functions are the heart of JavaScript. They are objects. They create
+          scope. They enable closures.
+        </p>
+
+        <h2 id="declarations">Three Ways to Define a Function</h2>
+
+        <h3>1. Function Declaration</h3>
+        <pre><code><span class="code-keyword">function</span> <span class="code-function">greet</span>(name) {
+  <span class="code-keyword">return</span> <span class="code-string">`Hello, ${name}`</span>;
+}
+
+<span class="code-comment">// Hoisted: you can call it before its definition</span>
+console.log(greet(<span class="code-string">"Ada"</span>));</code></pre>
+
+        <h3>2. Function Expression</h3>
+        <pre><code><span class="code-keyword">const</span> greet = <span class="code-keyword">function</span>(name) {
+  <span class="code-keyword">return</span> <span class="code-string">`Hello, ${name}`</span>;
+};
+
+<span class="code-comment">// NOT hoisted. Must be defined before use.</span></code></pre>
+
+        <h3>3. Arrow Function</h3>
+        <pre><code><span class="code-keyword">const</span> greet = (name) => <span class="code-string">`Hello, ${name}`</span>;
+
+<span class="code-comment">// Key differences from regular functions:</span>
+<span class="code-comment">// 1. No 'this' binding (inherits from parent scope)</span>
+<span class="code-comment">// 2. No 'arguments' object</span>
+<span class="code-comment">// 3. Cannot be used as a constructor</span></code></pre>
+
+        <h2 id="scope">Scope and the Scope Chain</h2>
+        <p>
+          Scope answers one question: <em>Where can I access this variable?</em>
+        </p>
+
+        <pre><code><span class="code-keyword">const</span> global = <span class="code-string">"I am global"</span>;
+
+<span class="code-keyword">function</span> <span class="code-function">outer</span>() {
+  <span class="code-keyword">const</span> outerVar = <span class="code-string">"I am outer"</span>;
+  
+  <span class="code-keyword">function</span> <span class="code-function">inner</span>() {
+    <span class="code-keyword">const</span> innerVar = <span class="code-string">"I am inner"</span>;
+    console.log(global);   <span class="code-comment">// ✓ Found in global scope</span>
+    console.log(outerVar); <span class="code-comment">// ✓ Found in outer scope</span>
+    console.log(innerVar); <span class="code-comment">// ✓ Found in inner scope</span>
+  }
+  
+  inner();
+}
+
+outer();</code></pre>
+
+        <h3>Lexical Scoping</h3>
+        <p>
+          JavaScript uses lexical (static) scoping. A function's scope is
+          determined by where it is <em>written</em>, not where it is
+          <em>called</em>.
+        </p>
+
+        <h2 id="closures">Closures</h2>
+        <p>
+          A closure is a function that remembers its outer variables even when
+          the outer function has finished.
+        </p>
+
+        <pre><code><span class="code-keyword">function</span> <span class="code-function">makeCounter</span>() {
+  <span class="code-keyword">let</span> count = <span class="code-number">0</span>;
+  
+  <span class="code-keyword">return</span> <span class="code-keyword">function</span>() {
+    <span class="code-keyword">return</span> ++count; <span class="code-comment">// 'count' is remembered via closure</span>
+  };
+}
+
+<span class="code-keyword">const</span> counter = makeCounter();
+console.log(counter()); <span class="code-comment">// 1</span>
+console.log(counter()); <span class="code-comment">// 2</span>
+console.log(counter()); <span class="code-comment">// 3</span></code></pre>
+
+        <div class="card" style="border-left: 4px solid var(--accent)">
+          <strong>💡 Interview Tip</strong>
+          <p class="text-sm" style="margin-bottom: 0">
+            Closures are used in: data privacy, factory functions, partial
+            application, and maintaining state in async callbacks.
+          </p>
+        </div>
+
+        <h3>Closure in a Loop (Classic Pitfall)</h3>
+        <pre><code><span class="code-comment">// WRONG: All buttons alert "Button 5"</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">var</span> i = <span class="code-number">0</span>; i < <span class="code-number">5</span>; i++) {
+  setTimeout(() => alert(<span class="code-string">"Button "</span> + i), <span class="code-number">100</span>);
+}
+
+<span class="code-comment">// FIX 1: Use let (block-scoped)</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-number">5</span>; i++) {
+  setTimeout(() => alert(<span class="code-string">"Button "</span> + i), <span class="code-number">100</span>);
+}
+
+<span class="code-comment">// FIX 2: Use an IIFE to capture i</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">var</span> i = <span class="code-number">0</span>; i < <span class="code-number">5</span>; i++) {
+  (<span class="code-keyword">function</span>(capturedI) {
+    setTimeout(() => alert(<span class="code-string">"Button "</span> + capturedI), <span class="code-number">100</span>);
+  })(i);
+}</code></pre>
+
+        <h2 id="this">The 'this' Keyword</h2>
+        <p>
+          The value of <code>this</code> depends on <strong>how</strong> a
+          function is called. Not where it is written.
+        </p>
+
+        <table>
+          <tr>
+            <th>Context</th>
+            <th><code>this</code> refers to</th>
+          </tr>
+          <tr>
+            <td>Global scope (non-strict)</td>
+            <td><code>window</code> (browser) or <code>global</code> (Node)</td>
+          </tr>
+          <tr>
+            <td>Global scope (strict mode)</td>
+            <td><code>undefined</code></td>
+          </tr>
+          <tr>
+            <td>Object method</td>
+            <td>The object before the dot</td>
+          </tr>
+          <tr>
+            <td>Constructor (<code>new</code>)</td>
+            <td>The new instance</td>
+          </tr>
+          <tr>
+            <td>Event handler</td>
+            <td>The DOM element that fired the event</td>
+          </tr>
+          <tr>
+            <td>Arrow function</td>
+            <td><code>this</code> from the enclosing (parent) scope</td>
+          </tr>
+          <tr>
+            <td><code>call</code> / <code>apply</code> / <code>bind</code></td>
+            <td>The first argument passed</td>
+          </tr>
+        </table>
+
+        <pre><code><span class="code-keyword">const</span> user = {
+  name: <span class="code-string">"Ada"</span>,
+  greet() {
+    console.log(<span class="code-string">"Hi, "</span> + <span class="code-keyword">this</span>.name);
+  },
+  arrowGreet: () => {
+    console.log(<span class="code-string">"Hi, "</span> + <span class="code-keyword">this</span>.name); <span class="code-comment">// 'this' is window, not user</span>
+  }
+};
+
+user.greet();      <span class="code-comment">// "Hi, Ada"</span>
+user.arrowGreet(); <span class="code-comment">// "Hi, undefined" (or window.name)</span></code></pre>
+
+        <h3>Explicit Binding</h3>
+        <pre><code><span class="code-keyword">function</span> <span class="code-function">introduce</span>() {
+  console.log(<span class="code-string">"I am "</span> + <span class="code-keyword">this</span>.name);
+}
+
+<span class="code-keyword">const</span> person = { name: <span class="code-string">"Grace"</span> };
+
+introduce.call(person);   <span class="code-comment">// "I am Grace"  (calls immediately)</span>
+introduce.apply(person);  <span class="code-comment">// "I am Grace"  (calls immediately, array args)</span>
+
+<span class="code-keyword">const</span> bound = introduce.bind(person); <span class="code-comment">// returns a new function</span>
+bound(); <span class="code-comment">// "I am Grace"</span></code></pre>
+
+        <h2 id="iife">IIFE (Immediately Invoked Function Expression)</h2>
+        <pre><code>(<span class="code-keyword">function</span>() {
+  <span class="code-keyword">const</span> privateVar = <span class="code-string">"secret"</span>;
+  console.log(<span class="code-string">"Runs once!"</span>);
+})();
+
+<span class="code-comment">// Modern alternative: just use block scope</span>
+{
+  <span class="code-keyword">const</span> privateVar = <span class="code-string">"secret"</span>;
+}</code></pre>
+
+        <div class="mt-8" style="display: flex; justify-content: space-between">
+          <a
+            href="fundamentals.html"
+            style="color: var(--text-secondary); text-decoration: none"
+            >← Fundamentals</a
+          >
+          <a
+            href="objects-classes.html"
+            style="
+              padding: 0.5rem 1rem;
+              background: var(--accent);
+              color: white;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Next: Objects →</a
+          >
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p><strong>javascript.ai</strong></p>
+      </div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>

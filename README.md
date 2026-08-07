@@ -18,7 +18,7 @@ Unlike scattered blog posts or dense specification documents, this guide connect
 
 ## Live Demo
 
-🌐 **https://yourusername.github.io/javascript.ai**
+🌐 **https://joestechs.github.io/javascript.ai**
 
 *(Replace `yourusername` with your actual GitHub username after enabling GitHub Pages)*
 
@@ -123,7 +123,7 @@ Then visit: **http://localhost:8000**
    git add .
    git commit -m "Initial commit"
    git branch -M main
-   git remote add origin https://github.com/yourusername/javascript.ai.git
+   git remote add origin https://github.com/joestechs/javascript.ai.git
    git push -u origin main
    ```
 
@@ -135,7 +135,7 @@ Then visit: **http://localhost:8000**
 
 5. Click **Save**. Your site will be live at:
    ```
-   https://yourusername.github.io/javascript.ai
+   https://joestechs.github.io/javascript.ai
    ```
 
 ---
